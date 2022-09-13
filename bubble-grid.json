@@ -16,7 +16,7 @@
     },
     "information": {
       "name": "Bubble Grid",
-      "description": "Variation of scatter/bubble chart with numerical variable mapped to bubble size and categorical variables mapped to X and Y axes.",
+      "description": "Variation of scatter/bubble chart with numerical variable mapped to bubble size and categorical variables mapped to X and Y axes. Play around with the values of the domain object to resize bubbles.",
       "author": "Ruben Van de Voorde",
       "uuid": "f66dcd5f-2a02-40a8-ae84-402694a20b48",
       "generated": "2022-09-12T09:48:44.695Z"
