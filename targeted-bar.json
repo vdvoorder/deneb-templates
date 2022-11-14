@@ -1,20 +1,15 @@
 {
     "data": {
       "values": [
-        {"Category": "Actionable", "Actual Value": 500, "Target Value": 450},
+        {"Category": "Targeted", "Actual Value": 500, "Target Value": 450},
         {"Category": "Bar", "Actual Value": 295, "Target Value": 300},
         {"Category": "Chart", "Actual Value": 205, "Target Value": 250}
       ]
     },
-    "params": [{"name": "NearTargetBoundary", "value": 0.1}],
     "transform": [
       {
-        "calculate": "if((abs(datum['Actual Value'] - datum['Target Value']) / datum['Target Value']) <= NearTargetBoundary, \"Near target\", if(datum['Actual Value'] > datum['Target Value'], \"Over target\", \"Under target\"))",
+        "calculate": "if(datum['Actual Value'] >= datum['Target Value'], \"Over target\", \"Under target\")",
         "as": "ActualState"
-      },
-      {
-        "calculate": "round(100 * abs(datum['Actual Value'] - datum['Target Value']) / datum['Target Value']) + \"% \" + if(datum['Actual Value'] === datum['Target Value'], \"−\", if(datum['Actual Value'] > datum['Target Value'], \"▲\",\"▼\"))",
-        "as": "ActualLabel"
       },
       {"calculate": "\"Target\"", "as": "TargetDummy"}
     ],
@@ -24,9 +19,7 @@
         "mark": {"type": "bar"},
         "encoding": {
           "x": {"field": "Target Value"},
-          "fill": {
-            "field": "TargetDummy"
-          }
+          "fill": {"field": "TargetDummy"}
         }
       },
       {
@@ -34,9 +27,7 @@
         "mark": {"type": "bar", "opacity": 0.5},
         "encoding": {
           "x": {"field": "Actual Value"},
-          "fill": {
-            "field": "ActualState"
-          }
+          "fill": {"field": "ActualState", "scale": {"scheme": "accent"}}
         }
       }
     ],
