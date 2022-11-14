@@ -27,7 +27,10 @@
         "mark": {"type": "bar", "opacity": 0.5},
         "encoding": {
           "x": {"field": "Actual Value"},
-          "fill": {"field": "ActualState", "scale": {"scheme": "accent"}}
+          "fill": {
+            "field": "ActualState",
+            "scale": {"range": ["dodgerblue", "lightgray", "gold"]}
+          }
         }
       }
     ],
