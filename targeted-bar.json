@@ -9,7 +9,14 @@
     },
     "params": [{"name": "NearTargetBoundary", "value": 0.1}],
     "transform": [
-      {"calculate": "if(datum['Actual Value'] - datum['Target Value'] >= 0, \"Over target\", if((abs(datum['Actual Value'] - datum['Target Value']) / datum['Target Value']) <= NearTargetBoundary, \"Near target\", \"Under target\"))", "as": "ActualState"},
+      {
+        "calculate": "if(datum['Actual Value'] - datum['Target Value'] >= 0, \"Over target\", if((abs(datum['Actual Value'] - datum['Target Value']) / datum['Target Value']) <= NearTargetBoundary, \"Near target\", \"Under target\"))",
+        "as": "ActualState"
+      },
+      {
+        "calculate": "round(100 * abs(datum['Actual Value'] - datum['Target Value']) / datum['Target Value']) + \"% \" + if(datum['Actual Value'] === datum['Target Value'], \"−\", if(datum['Actual Value'] > datum['Target Value'], \"▲\",\"▼\"))",
+        "as": "ActualLabel"
+      },
       {"calculate": "\"Target\"", "as": "TargetDummy"}
     ],
     "layer": [
@@ -31,6 +38,19 @@
             "field": "ActualState",
             "scale": {"range": ["gold", "dodgerblue", "lightgray", "crimson"]}
           }
+        }
+      },
+      {
+        "description": "Actual Value labels at end of bars",
+        "mark": {"type": "text", "align": "left", "dx": 5},
+        "encoding": {
+          "x": {"field": "Actual Value"},
+          "color": {
+            "field": "ActualState",
+            "scale": {"range": ["gold", "dodgerblue", "crimson"]},
+            "legend": null
+          },
+          "text": {"field": "ActualLabel"}
         }
       }
     ],
