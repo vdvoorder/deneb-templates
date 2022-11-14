@@ -16,7 +16,7 @@
         "calculate": "round(100 * abs(datum['Actual Value'] - datum['Target Value']) / datum['Target Value']) + \"% \" + if(datum['Actual Value'] === datum['Target Value'], \"−\", if(datum['Actual Value'] > datum['Target Value'], \"▲\",\"▼\"))",
         "as": "ActualLabel"
       },
-      {"calculate": "0", "as": "dummy"}
+      {"calculate": "\"Target\"", "as": "TargetDummy"}
     ],
     "layer": [
       {
@@ -24,8 +24,9 @@
         "mark": {"type": "bar"},
         "encoding": {
           "x": {"field": "Target Value"},
-          "fill": {"value": "#dddddd"},
-          "stroke": {"value": "#aaaaaa"}
+          "fill": {
+            "field": "TargetDummy"
+          }
         }
       },
       {
@@ -33,36 +34,10 @@
         "mark": {"type": "bar", "opacity": 0.5},
         "encoding": {
           "x": {"field": "Actual Value"},
-          "fill": {"field": "ActualState", "legend": null}
+          "fill": {
+            "field": "ActualState"
+          }
         }
-      },
-      {
-        "description": "Actual Value strokes at end of bars",
-        "mark": {
-          "type": "point",
-          "shape": "stroke",
-          "angle": 90,
-          "size": 300,
-          "strokeWidth": 3
-        },
-        "encoding": {
-          "x": {"field": "Actual Value"},
-          "color": {"field": "ActualState"}
-        }
-      },
-      {
-        "description": "Actual Value labels at end of bars",
-        "mark": {"type": "text", "align": "left", "dx": 5},
-        "encoding": {
-          "x": {"field": "Actual Value"},
-          "color": {"field": "ActualState"},
-          "text": {"field": "ActualLabel"}
-        }
-      },
-      {
-        "description": "Dummy to include Target in legend",
-        "mark": {"type": "text"},
-        "encoding": {"x": {"field": "dummy"}, "color": {"datum": "Target"}}
       }
     ],
     "encoding": {
