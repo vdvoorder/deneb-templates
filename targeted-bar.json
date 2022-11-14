@@ -1,10 +1,10 @@
 {
     "data": {
       "values": [
-        {"Category": "Targeted", "Actual Value": 500, "Target Value": 450},
-        {"Category": "Bar", "Actual Value": 295, "Target Value": 300},
-        {"Category": "Chart", "Actual Value": 351, "Target Value": 350},
-        {"Category": "foo", "Actual Value": 205, "Target Value": 250}
+        {"Category": "a", "Actual Value": 500, "Target Value": 450},
+        {"Category": "b", "Actual Value": 295, "Target Value": 300},
+        {"Category": "c", "Actual Value": 351, "Target Value": 350},
+        {"Category": "d", "Actual Value": 205, "Target Value": 250}
       ]
     },
     "params": [{"name": "NearTargetBoundary", "value": 0.1}],
