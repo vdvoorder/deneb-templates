@@ -33,7 +33,11 @@
   ],
   "encoding": {
     "x": {"type": "quantitative", "stack": null},
-    "y": {"field": "Category", "type": "nominal"}
+    "y": {
+      "field": "Category",
+      "type": "nominal",
+      "sort": {"encoding": "x", "order": "descending"}
+    }
   },
   "config": {"axis": {"title": null}}
 }
