@@ -10,6 +10,10 @@
   "params": [{"name": "NearTargetBoundary", "value": 0.1}],
   "transform": [
     {"calculate": "datum['Actual'] - datum['Target']", "as": "Difference"},
+    {
+      "calculate": "round(100 * abs(datum['Actual'] - datum['Target']) / datum['Target']) + \"% \" + if(datum['Actual'] === datum['Target Value'], \"−\", if(datum['Actual'] > datum['Target'], \"▲\",\"▼\"))",
+      "as": "ActualLabel"
+    },
     {"fold": ["Actual", "Target"]},
     {
       "calculate": "if(datum['key'] === \"Target\", \"Target\", if(datum['Difference'] >= 0, \"Over\", if(abs(datum['Difference'] / datum['Target']) <= NearTargetBoundary, \"Near\", \"Under\")))",
@@ -50,16 +54,26 @@
           "legend": null
         }
       }
+    },
+    {
+      "description": "TODO: set labels to end of either Actual or Target, whichever is greater",
+      "transform": [{"filter": "datum['key'] === \"Actual\""}],
+      "mark": {"type": "text", "align": "left", "dx": 5},
+      "encoding": {
+        "x": {"field": "value"},
+        "color": {
+          "field": "ActualState",
+          "sort": ["Under", "Near", "Over"],
+          "scale": {"range": ["crimson", "gold", "dodgerblue"]},
+          "legend": null
+        },
+        "text": {"field": "ActualLabel"}
+      }
     }
   ],
-  "description":"sorting broke again because point and bar scales aren't unioning",
   "encoding": {
     "x": {"type": "quantitative", "stack": null},
-    "y": {
-      "field": "Category",
-      "type": "nominal",
-      "sort": "-x"
-    }
+    "y": {"field": "Category", "type": "nominal", "sort": "-x"}
   },
   "config": {"axis": {"title": null}}
 }
