@@ -31,7 +31,7 @@
       }
     },
     {
-      "description": "Actual Value strokes at end of bars",
+      "description": "Strokes at end of Actual bars",
       "transform": [{"filter": "datum['key'] === \"Actual\""}],
       "mark": {
         "type": "point",
@@ -52,12 +52,13 @@
       }
     }
   ],
+  "description":"sorting broke again because point and bar scales aren't unioning",
   "encoding": {
     "x": {"type": "quantitative", "stack": null},
     "y": {
       "field": "Category",
       "type": "nominal",
-      "sort": {"encoding": "x", "order": "descending"}
+      "sort": "-x"
     }
   },
   "config": {"axis": {"title": null}}
