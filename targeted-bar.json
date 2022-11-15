@@ -9,14 +9,15 @@
   },
   "params": [{"name": "NearTargetBoundary", "value": 0.1}],
   "transform": [
+    {"calculate": "max(datum['Actual'], datum['Target'])", "as": "Max"},
     {"calculate": "datum['Actual'] - datum['Target']", "as": "Difference"},
     {
       "calculate": "round(100 * abs(datum['Actual'] - datum['Target']) / datum['Target']) + \"% \" + if(datum['Actual'] === datum['Target Value'], \"−\", if(datum['Actual'] > datum['Target'], \"▲\",\"▼\"))",
       "as": "ActualLabel"
     },
-    {"fold": ["Actual", "Target"]},
+    {"fold": ["Actual", "Target"], "as": ["ActualTarget", "Value"]},
     {
-      "calculate": "if(datum['key'] === \"Target\", \"Target\", if(datum['Difference'] >= 0, \"Over\", if(abs(datum['Difference'] / datum['Target']) <= NearTargetBoundary, \"Near\", \"Under\")))",
+      "calculate": "if(datum['ActualTarget'] === \"Target\", \"Target\", if(datum['Difference'] >= 0, \"Over\", if(abs(datum['Difference'] / datum['Target']) <= NearTargetBoundary, \"Near\", \"Under\")))",
       "as": "ActualState"
     }
   ],
@@ -25,7 +26,7 @@
       "description": "All filled bars",
       "mark": {"type": "bar", "opacity": 0.5},
       "encoding": {
-        "x": {"field": "value"},
+        "x": {"field": "Value"},
         "fill": {
           "field": "ActualState",
           "type": "nominal",
@@ -36,7 +37,7 @@
     },
     {
       "description": "Strokes at end of Actual bars",
-      "transform": [{"filter": "datum['key'] === \"Actual\""}],
+      "transform": [{"filter": "datum['ActualTarget'] === \"Actual\""}],
       "mark": {
         "type": "point",
         "shape": "stroke",
@@ -45,7 +46,7 @@
         "strokeWidth": 3
       },
       "encoding": {
-        "x": {"field": "value"},
+        "x": {"field": "Value"},
         "color": {
           "field": "ActualState",
           "type": "nominal",
@@ -56,11 +57,15 @@
       }
     },
     {
-      "description": "TODO: set labels to end of either Actual or Target, whichever is greater",
-      "transform": [{"filter": "datum['key'] === \"Actual\""}],
+      "description": "TODO: find way to either use max of Actual and Target as x encoding or enforce correct color scale for labels",
+      "transform": [
+        {
+          "filter": "if(datum['Actual'] > datum['Target'], datum['ActualTarget'] === \"Actual\", datum['ActualTarget'] === \"Target\")"
+        }
+      ],
       "mark": {"type": "text", "align": "left", "dx": 5},
       "encoding": {
-        "x": {"field": "value"},
+        "x": {"field": "Value"},
         "color": {
           "field": "ActualState",
           "sort": ["Under", "Near", "Over"],
