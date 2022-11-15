@@ -18,7 +18,7 @@
   ],
   "layer": [
     {
-      "description": "Actual Value bars",
+      "description": "All filled bars",
       "mark": {"type": "bar", "opacity": 0.5},
       "encoding": {
         "x": {"field": "value"},
@@ -27,6 +27,27 @@
           "type": "nominal",
           "sort": ["Target", "Under", "Near", "Over"],
           "scale": {"range": ["lightgray", "crimson", "gold", "dodgerblue"]}
+        }
+      }
+    },
+    {
+      "description": "Actual Value strokes at end of bars",
+      "transform": [{"filter": "datum['key'] === \"Actual\""}],
+      "mark": {
+        "type": "point",
+        "shape": "stroke",
+        "angle": 90,
+        "size": 320,
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "x": {"field": "Actual"},
+        "color": {
+          "field": "ActualState",
+          "type": "nominal",
+          "sort": ["Under", "Near", "Over"],
+          "scale": {"range": ["crimson", "gold", "dodgerblue"]},
+          "legend": null
         }
       }
     }
