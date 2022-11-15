@@ -57,7 +57,7 @@
       }
     },
     {
-      "description": "TODO: find way to either use max of Actual and Target as x encoding or enforce correct color scale for labels",
+      "description": "want labels to either use max of Actual or Target as x encoding so they never overlap with a bar. TODO: find way to either use max of Actual and Target as x encoding or enforce correct color scale for labels",
       "transform": [
         {
           "filter": "if(datum['Actual'] > datum['Target'], datum['ActualTarget'] === \"Actual\", datum['ActualTarget'] === \"Target\")"
