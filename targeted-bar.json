@@ -41,7 +41,7 @@
         "strokeWidth": 3
       },
       "encoding": {
-        "x": {"field": "Actual"},
+        "x": {"field": "value"},
         "color": {
           "field": "ActualState",
           "type": "nominal",
