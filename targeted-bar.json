@@ -1,56 +1,24 @@
 {
-    "data": {
-      "values": [
-        {"Category": "a", "Actual Value": 500, "Target Value": 450},
-        {"Category": "b", "Actual Value": 295, "Target Value": 300},
-        {"Category": "c", "Actual Value": 351, "Target Value": 350},
-        {"Category": "d", "Actual Value": 205, "Target Value": 250}
-      ]
-    },
-    "params": [{"name": "NearTargetBoundary", "value": 0.1}],
-    "transform": [
-      {
-        "calculate": "if(datum['Actual Value'] - datum['Target Value'] >= 0, \"Over target\", if((abs(datum['Actual Value'] - datum['Target Value']) / datum['Target Value']) <= NearTargetBoundary, \"Near target\", \"Under target\"))",
-        "as": "ActualState"
-      },
-      {"calculate": "\"Target\"", "as": "TargetDummy"},
-      {
-        "calculate": "datum['Actual Value'] + \"|\" + datum['ActualState']",
-        "as": "ConcatenatedActual"
-      },
-      {
-        "calculate": "datum['Target Value'] + \"|Target\"",
-        "as": "ConcatenatedTarget"
-      },
-      {
-        "fold": ["ConcatenatedActual", "ConcatenatedTarget"]
-      }
-    ],
-    "layer": [
-      {
-        "description": "Target Value bars",
-        "mark": {"type": "bar"},
-        "encoding": {
-          "x": {"field": "Target Value"},
-          "fill": {"field": "TargetDummy"},
-          "stroke": {"value": "gray"}
-        }
-      },
-      {
-        "description": "Actual Value bars",
-        "mark": {"type": "bar", "opacity": 0.5},
-        "encoding": {
-          "x": {"field": "Actual Value"},
-          "fill": {
-            "field": "ActualState",
-            "scale": {"range": ["gold", "dodgerblue", "lightgray", "crimson"]}
-          }
-        }
-      }
-    ],
-    "encoding": {
-      "x": {"type": "quantitative"},
-      "y": {"field": "Category", "type": "nominal"}
-    },
-    "config": {}
-  }
+  "data": {
+    "values": [
+      {"Category": "a", "Actual": 500, "Target": 450},
+      {"Category": "b", "Actual": 295, "Target": 300},
+      {"Category": "c", "Actual": 351, "Target": 350},
+      {"Category": "d", "Actual": 205, "Target": 250}
+    ]
+  },
+  "params": [{"name": "NearTargetBoundary", "value": 0.1}],
+  "transform": [{"fold": ["Actual", "Target"]}],
+  "layer": [
+    {
+      "description": "Actual Value bars",
+      "mark": {"type": "bar", "opacity": 0.5},
+      "encoding": {"x": {"field": "value"}, "fill": {"field": "key"}}
+    }
+  ],
+  "encoding": {
+    "x": {"type": "quantitative", "stack": false},
+    "y": {"field": "Category", "type": "nominal"}
+  },
+  "config": {}
+}
