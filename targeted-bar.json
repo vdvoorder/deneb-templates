@@ -8,17 +8,32 @@
     ]
   },
   "params": [{"name": "NearTargetBoundary", "value": 0.1}],
-  "transform": [{"fold": ["Actual", "Target"]}],
+  "transform": [
+    {"calculate": "datum['Actual'] - datum['Target']", "as": "Difference"},
+    {"fold": ["Actual", "Target"]},
+    {
+      "calculate": "if(datum['key'] === \"Target\", \"Target\", if(datum['Difference'] >= 0, \"Over\", if(abs(datum['Difference'] / datum['Target']) <= NearTargetBoundary, \"Near\", \"Under\")))",
+      "as": "ActualState"
+    }
+  ],
   "layer": [
     {
       "description": "Actual Value bars",
       "mark": {"type": "bar", "opacity": 0.5},
-      "encoding": {"x": {"field": "value"}, "fill": {"field": "key"}}
+      "encoding": {
+        "x": {"field": "value"},
+        "fill": {
+          "field": "ActualState",
+          "type": "nominal",
+          "sort": ["Target", "Under", "Near", "Over"],
+          "scale": {"range": ["lightgray", "crimson", "gold", "dodgerblue"]}
+        }
+      }
     }
   ],
   "encoding": {
-    "x": {"type": "quantitative", "stack": false},
+    "x": {"type": "quantitative", "stack": null},
     "y": {"field": "Category", "type": "nominal"}
   },
-  "config": {}
+  "config": {"axis": {"title": null}}
 }
