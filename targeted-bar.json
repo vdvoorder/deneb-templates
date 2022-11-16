@@ -1,40 +1,40 @@
 {
   "data": {
     "values": [
-      {"Category": "a", "Actual Value": 500, "Target Value": 450},
-      {"Category": "b", "Actual Value": 295, "Target Value": 300},
-      {"Category": "c", "Actual Value": 351, "Target Value": 350},
-      {"Category": "d", "Actual Value": 205, "Target Value": 250}
+      {"Category": "a", "Actual": 500, "Target": 450},
+      {"Category": "b", "Actual": 295, "Target": 300},
+      {"Category": "c", "Actual": 351, "Target": 350},
+      {"Category": "d", "Actual": 205, "Target": 250}
     ]
   },
   "params": [{"name": "NearTargetBoundary", "value": 0.1}],
   "transform": [
     {
-      "calculate": "if(datum['Actual Value'] - datum['Target Value'] >= 0, \"Over target\", if((abs(datum['Actual Value'] - datum['Target Value']) / datum['Target Value']) <= NearTargetBoundary, \"Near target\", \"Under target\"))",
+      "calculate": "if(datum.Actual - datum.Target >= 0, 'Over target', if((abs(datum.Actual - datum.Target) / datum.Target) <= NearTargetBoundary, 'Near target', 'Under target'))",
       "as": "ActualState"
     },
     {
-      "calculate": "round(100 * abs(datum['Actual Value'] - datum['Target Value']) / datum['Target Value']) + \"% \" + if(datum['Actual Value'] === datum['Target Value'], \"−\", if(datum['Actual Value'] > datum['Target Value'], \"▲\",\"▼\"))",
+      "calculate": "round(100 * abs(datum.Actual - datum.Target) / datum.Target) + '% ' + if(datum.Actual === datum.Target, '−', if(datum.Actual > datum.Target, '▲','▼'))",
       "as": "ActualLabel"
     },
-    {"calculate": "\"Target\"", "as": "TargetDummy"},
-    {"calculate": "max(datum['Actual Value'], datum['Target Value'])", "as": "Max"}
+    {"calculate": "'Target'", "as": "TargetDummy"},
+    {"calculate": "max(datum.Actual, datum.Target)", "as": "Max"}
   ],
   "layer": [
     {
-      "description": "Target Value bars",
+      "description": "Target bars",
       "mark": {"type": "bar"},
       "encoding": {
-        "x": {"field": "Target Value"},
+        "x": {"field": "Target"},
         "fill": {"field": "TargetDummy"},
         "stroke": {"value": "gray"}
       }
     },
     {
-      "description": "Actual Value bars",
+      "description": "Actual bars",
       "mark": {"type": "bar", "opacity": 0.5},
       "encoding": {
-        "x": {"field": "Actual Value"},
+        "x": {"field": "Actual"},
         "fill": {
           "field": "ActualState",
           "scale": {"range": ["gold", "dodgerblue", "lightgray", "crimson"]}
@@ -42,7 +42,7 @@
       }
     },
     {
-      "description": "Actual Value strokes at end of bars",
+      "description": "Actual strokes at end of bars",
       "mark": {
         "type": "point",
         "shape": "stroke",
@@ -51,12 +51,12 @@
         "strokeWidth": 3
       },
       "encoding": {
-        "x": {"field": "Actual Value"},
+        "x": {"field": "Actual"},
         "color": {"field": "ActualState"}
       }
     },
     {
-      "description": "Actual Value labels at end of bars",
+      "description": "Actual labels at end of bars",
       "mark": {"type": "text", "align": "left", "dx": 5},
       "encoding": {
         "x": {"field": "Max"},
@@ -71,7 +71,7 @@
   ],
   "encoding": {
     "x": {"type": "quantitative"},
-    "y": {"field": "Category", "type": "nominal", "sort": {"field": "Actual Value", "op": "sum", "order": "descending"}}
+    "y": {"field": "Category", "type": "nominal", "sort": {"field": "Actual", "op": "sum", "order": "descending"}}
   },
   "config": {}
 }
