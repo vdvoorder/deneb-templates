@@ -1,12 +1,13 @@
 {
   "data": {
     "values": [
-      {"Category": "Weapons", "Actual": 500, "Target": 450},
-      {"Category": "Armour", "Actual": 270, "Target": 300},
-      {"Category": "Potions", "Actual": 351, "Target": 350},
-      {"Category": "Spells", "Actual": 205, "Target": 250}
+      {"Category": "Weapons", "Actual": 5200, "Target": 4500},
+      {"Category": "Potions", "Actual": 3020, "Target": 3000},
+      {"Category": "Armour", "Actual": 3240, "Target": 3500},
+      {"Category": "Spells", "Actual": 2050, "Target": 2500}
     ]
   },
+  "description": "TODO make height of strokes proportional to padding between bars",
   "params": [{"name": "NearTargetBoundary", "value": 0.1}],
   "transform": [
     {
@@ -50,7 +51,7 @@
         "color": {"expr": "datum.ActualColor"},
         "shape": "stroke",
         "angle": 90,
-        "size": 300,
+        "size": 200,
         "strokeWidth": 3
       },
       "encoding": {"x": {"field": "Actual"}}
@@ -92,11 +93,15 @@
     "y": {
       "field": "Category",
       "type": "nominal",
-      "sort": {"field": "Actual", "op": "sum", "order": "descending"}
+      "sort": {"field": "Actual", "op": "sum", "order": "descending"},
+      "scale": {"paddingInner": 0.3, "paddingOuter": 0.3}
     }
   },
-  "config":{
-    "axis": {"title": null},
+  "config": {
+    "view": {"stroke": "transparent"},
+    "axis": {"domain": false, "ticks": false, "title": null},
+    "axisX": {"tickCount": 3, "gridDash": [1, 4], "gridCap": "round"},
+    "axisY": {"labelPadding": 8},
     "legend": {"title": null, "orient": "top"}
   }
 }
