@@ -1,10 +1,10 @@
 {
   "data": {
     "values": [
-      {"Category": "a", "Actual": 500, "Target": 450},
-      {"Category": "b", "Actual": 295, "Target": 300},
-      {"Category": "c", "Actual": 351, "Target": 350},
-      {"Category": "d", "Actual": 205, "Target": 250}
+      {"Category": "Weapons", "Actual": 500, "Target": 450},
+      {"Category": "Armour", "Actual": 270, "Target": 300},
+      {"Category": "Potions", "Actual": 351, "Target": 350},
+      {"Category": "Spells", "Actual": 205, "Target": 250}
     ]
   },
   "params": [{"name": "NearTargetBoundary", "value": 0.1}],
@@ -17,61 +17,86 @@
       "calculate": "round(100 * abs(datum.Actual - datum.Target) / datum.Target) + '% ' + if(datum.Actual === datum.Target, '−', if(datum.Actual > datum.Target, '▲','▼'))",
       "as": "ActualLabel"
     },
+    {
+      "calculate": "if(datum.ActualState === 'Over target', 'dodgerblue', if(datum.ActualState === 'Near target', 'gold', 'crimson'))",
+      "as": "ActualColor"
+    },
     {"calculate": "'Target'", "as": "TargetDummy"},
     {"calculate": "max(datum.Actual, datum.Target)", "as": "Max"}
   ],
   "layer": [
     {
       "description": "Target bars",
-      "mark": {"type": "bar"},
+      "mark": {"type": "bar", "opacity": 0.7},
       "encoding": {
         "x": {"field": "Target"},
-        "fill": {"field": "TargetDummy"},
+        "fill": {"value": "lightgray"},
         "stroke": {"value": "gray"}
       }
     },
     {
       "description": "Actual bars",
-      "mark": {"type": "bar", "opacity": 0.5},
-      "encoding": {
-        "x": {"field": "Actual"},
-        "fill": {
-          "field": "ActualState",
-          "scale": {"range": ["gold", "dodgerblue", "lightgray", "crimson"]}
-        }
-      }
+      "mark": {
+        "type": "bar",
+        "opacity": 0.5,
+        "fill": {"expr": "datum.ActualColor"}
+      },
+      "encoding": {"x": {"field": "Actual"}}
     },
     {
       "description": "Actual strokes at end of bars",
       "mark": {
         "type": "point",
+        "color": {"expr": "datum.ActualColor"},
         "shape": "stroke",
         "angle": 90,
         "size": 300,
         "strokeWidth": 3
       },
-      "encoding": {
-        "x": {"field": "Actual"},
-        "color": {"field": "ActualState"}
-      }
+      "encoding": {"x": {"field": "Actual"}}
     },
     {
       "description": "Actual labels at end of bars",
-      "mark": {"type": "text", "align": "left", "dx": 5},
+      "mark": {
+        "type": "text",
+        "color": {"expr": "datum.ActualColor"},
+        "align": "left",
+        "dx": 5
+      },
+      "encoding": {"x": {"field": "Max"}, "text": {"field": "ActualLabel"}}
+    },
+    {
+      "description": "Dummy layer to manually create legend",
+      "mark": {"type": "bar", "opacity": 0.7},
       "encoding": {
-        "x": {"field": "Max"},
-        "color": {
-          "field": "ActualState",
-          "scale": {"range": ["gold", "dodgerblue", "crimson"]},
-          "legend": null
+        "x": {"field": "Target"},
+        "fill": {
+          "field": "Legend",
+          "scale": {
+            "domain": ["Target", "Under target", "Near target", "Over Target"],
+            "range": ["lightgray", "crimson", "gold", "dodgerblue"]
+          }
         },
-        "text": {"field": "ActualLabel"}
+        "stroke": {
+          "field": "Legend",
+          "scale": {
+            "domain": ["Target", "Under target", "Near target", "Over Target"],
+            "range": ["gray", "crimson", "gold", "dodgerblue"]
+          }
+        }
       }
     }
   ],
   "encoding": {
     "x": {"type": "quantitative"},
-    "y": {"field": "Category", "type": "nominal", "sort": {"field": "Actual", "op": "sum", "order": "descending"}}
+    "y": {
+      "field": "Category",
+      "type": "nominal",
+      "sort": {"field": "Actual", "op": "sum", "order": "descending"}
+    }
   },
-  "config": {}
+  "config":{
+    "axis": {"title": null},
+    "legend": {"title": null, "orient": "top"}
+  }
 }
