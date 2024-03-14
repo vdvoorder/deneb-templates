@@ -1,0 +1,176 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "usermeta": {
+    "deneb": {
+      "build": "1.6.2.1",
+      "metaVersion": 1,
+      "provider": "vegaLite",
+      "providerVersion": "5.16.3"
+    },
+    "interactivity": {
+      "tooltip": true,
+      "contextMenu": true,
+      "selection": true,
+      "highlight": true,
+      "dataPointLimit": 50
+    },
+    "information": {
+      "name": "Cross-highlighted Scatter Chart",
+      "description": "Basic implementation of a scatter chart that supports cross-highlighting.",
+      "author": "Ruben Van de Voorde",
+      "uuid": "319c49c6-d393-4baa-a2ac-98f78f5f5955",
+      "generated": "2024-03-14T10:56:40.493Z"
+    },
+    "dataset": [
+      {
+        "key": "__0__",
+        "name": "ID",
+        "description": "A column to uniquely identify every point in the scatter chart.",
+        "type": "numeric",
+        "kind": "column"
+      },
+      {
+        "key": "__1__",
+        "name": "Sum of Value X",
+        "description": "The measure for the X axis of the scatter chart.",
+        "type": "numeric",
+        "kind": "measure"
+      },
+      {
+        "key": "__2__",
+        "name": "Sum of Value Y",
+        "description": "The measure for the Y axis of the scatter chart.",
+        "type": "numeric",
+        "kind": "measure"
+      }
+    ]
+  },
+  "config": {
+    "view": {"stroke": "transparent"},
+    "font": "Segoe UI",
+    "arc": {},
+    "area": {
+      "line": true,
+      "opacity": 0.6
+    },
+    "bar": {},
+    "circle": {
+      "fill": {
+        "expr": "pbiColor(0, 0.8)"
+      },
+      "stroke": {"expr": "pbiColor(0)"},
+      "size": 300
+    },
+    "line": {
+      "strokeWidth": 3,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "filled": true,
+      "size": 75
+    },
+    "rect": {},
+    "text": {
+      "font": "Segoe UI",
+      "fontSize": 12,
+      "fill": "#605E5C"
+    },
+    "axis": {
+      "ticks": false,
+      "grid": false,
+      "domain": false,
+      "labelColor": "#605E5C",
+      "labelFontSize": 12,
+      "titleFont": "din",
+      "titleColor": "#252423",
+      "titleFontSize": 16,
+      "titleFontWeight": "normal"
+    },
+    "axisQuantitative": {
+      "tickCount": 3,
+      "grid": true,
+      "gridColor": "#C8C6C4",
+      "gridDash": [1, 5],
+      "labelFlush": false
+    },
+    "axisX": {"labelPadding": 5},
+    "axisY": {"labelPadding": 10},
+    "header": {
+      "titleFont": "din",
+      "titleFontSize": 16,
+      "titleColor": "#252423",
+      "labelFont": "Segoe UI",
+      "labelFontSize": 13.333333333333332,
+      "labelColor": "#605E5C"
+    },
+    "legend": {
+      "titleFont": "Segoe UI",
+      "titleFontWeight": "bold",
+      "titleColor": "#605E5C",
+      "labelFont": "Segoe UI",
+      "labelFontSize": 13.333333333333332,
+      "labelColor": "#605E5C",
+      "symbolType": "circle",
+      "symbolSize": 75
+    }
+  },
+  "data": {"name": "dataset"},
+  "layer": [
+    {
+      "description": "Neutral points",
+      "mark": {
+        "type": "circle",
+        "tooltip": true
+      },
+      "encoding": {
+        "opacity": {"value": 0.2}
+      }
+    },
+    {
+      "description": "Selected points",
+      "mark": {
+        "type": "circle",
+        "tooltip": true
+      },
+      "encoding": {
+        "opacity": {
+          "condition": {
+            "test": {
+              "field": "__selected__",
+              "equal": "on"
+            },
+            "value": 1
+          },
+          "value": 0
+        }
+      }
+    },
+    {
+      "description": "Cross-highlighted points",
+      "mark": {
+        "type": "circle",
+        "tooltip": true
+      },
+      "encoding": {
+        "opacity": {
+          "condition": {
+            "test": "datum['__2____highlightStatus'] === \"on\" && datum['__2____highlight'] !== null",
+            "value": 1
+          },
+          "value": 0
+        }
+      }
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "__1__",
+      "type": "quantitative"
+    },
+    "y": {
+      "field": "__2__",
+      "type": "quantitative"
+    }
+  }
+}
